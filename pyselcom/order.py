@@ -2,6 +2,9 @@ import requests
 import json
 import random
 import string
+import pytz
+from pytz import timezone
+from datetime import datetime, timedelta
 from config import Config
 
 config = Config()
@@ -16,12 +19,18 @@ def random_number(digits_count):
     return final_string
 
 
+eastern = timezone('Africa/Dar_es_Salaam')
+
+#create a signatuure
+def compute_signature(parameters, signed_fields, request_timestamp, api_secret):
+    pass
+
+
 class OrderMinimal(object):
 
     def __init__(
             self, 
             vendor: str = None, 
-            order_id: str = None,
             buyer_email: str = None, 
             buyer_name: str = None, 
             buyer_phone: str = None, 
@@ -39,40 +48,112 @@ class OrderMinimal(object):
             expiry: str = None,
     ):
 
-        self.vendor = vendor
-        self.order_id = order_id
-        self.buyer_email = buyer_email
-        self.buyer_name = buyer_name
-        self.buyer_phone = buyer_phone
-        self.amount = amount
-        self.currency = currency
-        self.redirect_url = redirect_url
-        self.cancel_url = cancel_url
-        self.webhook = webhook
-        self.buyer_remarks = buyer_remarks
-        self.merchant_remarks = merchant_remarks
-        self.no_of_items = no_of_items
-        self.header_colour = header_colour
-        self.link_colour = link_colour
-        self.button_colour = button_colour
-        self.expiry = expiry
+        self._vendor = vendor
+        self._buyer_email = buyer_email
+        self._buyer_name = buyer_name
+        self._buyer_phone = buyer_phone
+        self._amount = amount
+        self._currency = currency
+        self._redirect_url = redirect_url
+        self._cancel_url = cancel_url
+        self._webhook = webhook
+        self._buyer_remarks = buyer_remarks
+        self._merchant_remarks = merchant_remarks
+        self._no_of_items = no_of_items
+        self._header_colour = header_colour
+        self._link_colour = link_colour
+        self._button_colour = button_colour
+        self._expiry = expiry
 
 
-    def order_minimal_request():
+        @property
+        def vendor(self):
+
+            return  self._vendor
+
+        @vendor.setter
+        def vendor(self, vendor: str):
+
+            if None:
+                return "Vendor ID is required"
+            
+            self._vendor = vendor
+        
+
+        @property
+        def buyer_email(self):
+
+            return  self._buyer_email
+
+        @buyer_email.setter
+        def vendor(self, buyer_email: str):
+
+            if None:
+                return "Buyer email is required"
+            
+            self._buyer_email = buyer_email
+        
+
+        @property
+        def buyer_name(self):
+
+            return  self._buyer_name
+
+        @buyer_name.setter
+        def buyer_name(self, buyer_name: str):
+
+            if None:
+                return "Buyer name is required"
+            
+            self._buyer_name = buyer_name
+    
+        @property
+        def buyer_phone(self):
+
+            return  self._buyer_phone
+
+        @buyer_phone.setter
+        def buyer_phone(self, buyer_phone: str):
+
+            if None:
+                return "Buyer Phone is required"
+            
+            self._buyer_phone = buyer_phone
+        
+
+        @property
+        def amount(self):
+
+            return  self._amount
+
+        @amount.setter
+        def amount(self, amount: str):
+
+            if None:
+                return "amount is required"
+            
+            self._amount = amount
+        
+
+
+    def order_minimal_request(buyer_email, buyer_name, buyer_phone, amount):
 
         #making request to create a new minimal order in selcom API
         url = f'https://apigw.selcommobile.com/{config.MINIMAL_ORDER_REQUEST_URL}'
 
+        payload_data = {}
+
+
+
         payload = json.dumps({
             "vendor": config.VENDOR,
             "order_id": random_number(10),
-            "buyer_email": "",
-            "buyer_name": "",
-            "buyer_phone": "",
-            "amount": int(),
+            "buyer_email": buyer_email,
+            "buyer_name": buyer_name,
+            "buyer_phone": buyer_phone,
+            "amount": int(amount),
             "currency": "TZS",
             "no_of_items": 1,
-            "webhook": "",
         })
         headers = {
             'Digest-Method': 'HS256',
