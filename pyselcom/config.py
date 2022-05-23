@@ -71,12 +71,8 @@ class Config(object):
         'button': '',
     }
 
+    #Configuration for creating a new order for processing payments (Including card payments)
+    ORDER_REQUEST_URL = 'v1/checkout/create-order'
 
-#Configuration for creating a new order for processing payments (Including card payments)
-class CreateOrderConfig(Config):
-    REQUEST_URL = 'v1/checkout/create-order'
-
-
-#Configuration for creating a new minimal order for processing payments (does not support card payments)
-class CreateOrderConfig(Config):
-    REQUEST_URL = 'v1/checkout/create-order-minimal'
+    #Configuration for creating a new minimal order for processing payments (does not support card payments)
+    MINIMAL_ORDER_REQUEST_URL = 'v1/checkout/create-order-minimal'
